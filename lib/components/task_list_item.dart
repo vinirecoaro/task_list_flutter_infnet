@@ -5,6 +5,10 @@ class TaskListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return ListTile(
+      title: Text("Titulo"),
+      subtitle: Text("Description"),
+      trailing: Text("10/05/2024"),
+    );
   }
 }
