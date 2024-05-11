@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:task_app/routes.dart';
+import 'package:task_app/screens/add_task_screen.dart';
 import 'package:task_app/screens/task_list_screen.dart';
 
 void main() {
@@ -12,12 +14,16 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'Flutter Demo',
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-          useMaterial3: true,
-        ),
-        home: const TaskListScreen());
+      title: 'Flutter Demo',
+      routes: {
+        Routes.TASK_LIST: (context) => TaskListScreen(),
+        Routes.ADD_TASK: (context) => AddTaskScreen()
+      },
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        useMaterial3: true,
+      ),
+    );
   }
 }

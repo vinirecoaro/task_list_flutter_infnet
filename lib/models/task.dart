@@ -5,6 +5,7 @@ class Task {
   final String time;
   final String lat;
   final String lon;
+  final bool edit;
 
   Task({
     required this.title,
@@ -13,5 +14,6 @@ class Task {
     required this.time,
     this.lat = '',
     this.lon = '',
+    this.edit = false,
   });
 }
