@@ -5,12 +5,10 @@ class InputField extends StatelessWidget {
       {super.key,
       this.label = "label name",
       this.enabled = true,
-      this.initialText = '',
       this.controller});
 
   final String label;
   final bool enabled;
-  final String initialText;
   final TextEditingController? controller;
 
   @override
@@ -18,7 +16,6 @@ class InputField extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
       child: TextFormField(
-        initialValue: initialText,
         enabled: enabled,
         controller: controller,
         decoration: InputDecoration(

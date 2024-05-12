@@ -24,6 +24,8 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
     // final TextEditingController timeController = TextEditingController();
 
     view = task.edit;
+    titleController.text = task.title;
+    descriptionController.text = task.description;
 
     return Scaffold(
         appBar: const DefaultAppBar(title: 'Adicionar Tarefa'),
@@ -77,11 +79,11 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                   children: [
                     InputField(
                       label: "Título",
-                      initialText: task.title,
+                      controller: titleController,
                     ),
                     InputFieldLarge(
                       label: "Descrição",
-                      initialText: task.description,
+                      controller: descriptionController,
                     ),
                   ],
                 )
