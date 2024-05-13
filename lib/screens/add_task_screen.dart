@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:task_app/components/default_app_bar.dart';
 import 'package:task_app/components/input_field.dart';
 import 'package:task_app/components/input_field_large.dart';
@@ -12,7 +13,9 @@ class AddTaskScreen extends StatefulWidget {
 }
 
 class _AddTaskScreenState extends State<AddTaskScreen> {
-  bool isChecked = true;
+  bool useMyLocation = true;
+  bool defineAPlace = false;
+  bool defineDateTime = false;
 
   @override
   Widget build(BuildContext context) {
@@ -20,8 +23,10 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
     final Task task = ModalRoute.of(context)!.settings.arguments as Task;
     final TextEditingController titleController = TextEditingController();
     final TextEditingController descriptionController = TextEditingController();
-    // final TextEditingController dateController = TextEditingController();
-    // final TextEditingController timeController = TextEditingController();
+    final TextEditingController cepController = TextEditingController();
+    final TextEditingController numController = TextEditingController();
+    final TextEditingController dateController = TextEditingController();
+    final TextEditingController timeController = TextEditingController();
 
     view = task.edit;
     titleController.text = task.title;
@@ -46,28 +51,102 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                     Row(
                       children: [
                         Checkbox(
-                            value: isChecked,
+                            value: defineDateTime,
                             onChanged: (value) {
                               setState(() {
-                                isChecked = value!;
+                                defineDateTime = value!;
                               });
                             }),
-                        const Text("Usar minha localização")
+                        const Text("Definir hora e data")
                       ],
                     ),
-                    // if (!isChecked)
-                    //   Column(
-                    //     children: [
-                    //       InputField(
-                    //         label: "CEP",
-                    //         controller: cepController,
-                    //       ),
-                    //       InputField(
-                    //         label: "Número",
-                    //         controller: numController,
-                    //       ),
-                    //     ],
-                    //   ),
+                    if (defineDateTime)
+                      Column(
+                        children: [
+                          Row(
+                            children: [
+                              Expanded(
+                                child: InputField(
+                                  label: "Data",
+                                  controller: dateController,
+                                ),
+                              ),
+                              Container(
+                                padding: const EdgeInsets.only(
+                                    right: 15, top: 8, bottom: 8),
+                                decoration:
+                                    const BoxDecoration(shape: BoxShape.circle),
+                                child: InkWell(
+                                    onTap: () {},
+                                    borderRadius: BorderRadius.circular(20),
+                                    child: const Icon(Icons.calendar_month)),
+                              )
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: InputField(
+                                  label: "Horário",
+                                  controller: timeController,
+                                ),
+                              ),
+                              Container(
+                                padding: const EdgeInsets.only(
+                                    right: 15, top: 8, bottom: 8),
+                                decoration:
+                                    const BoxDecoration(shape: BoxShape.circle),
+                                child: InkWell(
+                                    onTap: () {},
+                                    borderRadius: BorderRadius.circular(20),
+                                    child: const Icon(Icons.access_time)),
+                              )
+                            ],
+                          ),
+                        ],
+                      ),
+                    Row(
+                      children: [
+                        Checkbox(
+                            value: defineAPlace,
+                            onChanged: (value) {
+                              setState(() {
+                                defineAPlace = value!;
+                              });
+                            }),
+                        const Text("Definir um local")
+                      ],
+                    ),
+                    if (defineAPlace)
+                      Column(
+                        children: [
+                          Row(
+                            children: [
+                              Checkbox(
+                                  value: useMyLocation,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      useMyLocation = value!;
+                                    });
+                                  }),
+                              const Text("Usar minha localização")
+                            ],
+                          ),
+                          if (!useMyLocation)
+                            Column(
+                              children: [
+                                InputField(
+                                  label: "CEP",
+                                  controller: cepController,
+                                ),
+                                InputField(
+                                  label: "Número",
+                                  controller: numController,
+                                ),
+                              ],
+                            )
+                        ],
+                      ),
                     FilledButton(
                       onPressed: () {},
                       child: const Text("Enviar"),
