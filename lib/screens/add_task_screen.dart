@@ -177,6 +177,9 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                         ],
                       ),
                     FilledButton(
+                      style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all<Color>(
+                              Colors.blueGrey)),
                       onPressed: () {},
                       child: const Text("Enviar"),
                     ),
