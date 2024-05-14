@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:task_app/components/default_app_bar.dart';
 import 'package:task_app/components/input_field.dart';
 import 'package:task_app/components/input_field_large.dart';
@@ -16,17 +15,24 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
   bool useMyLocation = true;
   bool defineAPlace = false;
   bool defineDateTime = false;
+  final TextEditingController titleController = TextEditingController();
+  final TextEditingController descriptionController = TextEditingController();
+  final TextEditingController cepController = TextEditingController();
+  final TextEditingController numController = TextEditingController();
+  final TextEditingController dateController = TextEditingController();
+  final TextEditingController timeController = TextEditingController();
+  DateTime selectedDate = DateTime.now();
+
+  @override
+  void initState() {
+    super.initState();
+    dateController.text = formatDate(selectedDate);
+  }
 
   @override
   Widget build(BuildContext context) {
     bool view;
     final Task task = ModalRoute.of(context)!.settings.arguments as Task;
-    final TextEditingController titleController = TextEditingController();
-    final TextEditingController descriptionController = TextEditingController();
-    final TextEditingController cepController = TextEditingController();
-    final TextEditingController numController = TextEditingController();
-    final TextEditingController dateController = TextEditingController();
-    final TextEditingController timeController = TextEditingController();
 
     view = task.edit;
     titleController.text = task.title;
@@ -69,6 +75,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                                 child: InputField(
                                   label: "Data",
                                   controller: dateController,
+                                  readOnly: true,
                                 ),
                               ),
                               Container(
@@ -77,7 +84,18 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                                 decoration:
                                     const BoxDecoration(shape: BoxShape.circle),
                                 child: InkWell(
-                                    onTap: () {},
+                                    onTap: () async {
+                                      final DateTime? pickedDate =
+                                          await showDatePicker(
+                                              context: context,
+                                              initialDate: selectedDate,
+                                              firstDate: DateTime(2015, 8),
+                                              lastDate: DateTime(2101));
+                                      if (pickedDate != null) {
+                                        dateController.text =
+                                            formatDate(pickedDate);
+                                      }
+                                    },
                                     borderRadius: BorderRadius.circular(20),
                                     child: const Icon(Icons.calendar_month)),
                               )
@@ -89,6 +107,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                                 child: InputField(
                                   label: "Horário",
                                   controller: timeController,
+                                  readOnly: true,
                                 ),
                               ),
                               Container(
@@ -169,5 +188,24 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
             ],
           ),
         ));
+  }
+
+  String formatDate(DateTime date) {
+    String day = '';
+    String month = '';
+    String year = date.year.toString();
+    int dayInt = date.day;
+    int monthInt = date.month;
+    if (dayInt < 10) {
+      day = '0$dayInt';
+    } else {
+      day = dayInt.toString();
+    }
+    if (monthInt < 10) {
+      month = '0$monthInt';
+    } else {
+      month = monthInt.toString();
+    }
+    return '$day/$month/$year';
   }
 }

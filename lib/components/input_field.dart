@@ -5,10 +5,12 @@ class InputField extends StatelessWidget {
       {super.key,
       this.label = "label name",
       this.enabled = true,
+      this.readOnly = false,
       this.controller});
 
   final String label;
   final bool enabled;
+  final bool readOnly;
   final TextEditingController? controller;
 
   @override
@@ -17,6 +19,7 @@ class InputField extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
       child: TextFormField(
         enabled: enabled,
+        readOnly: readOnly,
         controller: controller,
         decoration: InputDecoration(
           label: Text(label),
