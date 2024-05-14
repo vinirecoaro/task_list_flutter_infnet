@@ -21,12 +21,13 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
   final TextEditingController numController = TextEditingController();
   final TextEditingController dateController = TextEditingController();
   final TextEditingController timeController = TextEditingController();
-  DateTime selectedDate = DateTime.now();
+  DateTime currentDate = DateTime.now();
+  TimeOfDay currentTime = TimeOfDay.now();
 
   @override
   void initState() {
     super.initState();
-    dateController.text = formatDate(selectedDate);
+    dateController.text = formatDate(currentDate);
   }
 
   @override
@@ -88,7 +89,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                                       final DateTime? pickedDate =
                                           await showDatePicker(
                                               context: context,
-                                              initialDate: selectedDate,
+                                              initialDate: currentDate,
                                               firstDate: DateTime(2015, 8),
                                               lastDate: DateTime(2101));
                                       if (pickedDate != null) {
@@ -116,7 +117,16 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                                 decoration:
                                     const BoxDecoration(shape: BoxShape.circle),
                                 child: InkWell(
-                                    onTap: () {},
+                                    onTap: () async {
+                                      final TimeOfDay? pickedTime =
+                                          await showTimePicker(
+                                              context: context,
+                                              initialTime: currentTime);
+                                      if (pickedTime != null) {
+                                        timeController.text =
+                                            formatTime(pickedTime);
+                                      }
+                                    },
                                     borderRadius: BorderRadius.circular(20),
                                     child: const Icon(Icons.access_time)),
                               )
@@ -207,5 +217,23 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
       month = monthInt.toString();
     }
     return '$day/$month/$year';
+  }
+
+  String formatTime(TimeOfDay time) {
+    String min = '';
+    String hour = '';
+    int minInt = time.minute;
+    int hourInt = time.hour;
+    if (minInt < 10) {
+      min = '0$minInt';
+    } else {
+      min = minInt.toString();
+    }
+    if (hourInt < 10) {
+      hour = '0$hourInt';
+    } else {
+      hour = hourInt.toString();
+    }
+    return '$hour:$min';
   }
 }
