@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:task_app/components/default_app_bar.dart';
 import 'package:task_app/components/input_field.dart';
@@ -182,11 +183,110 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                           backgroundColor: MaterialStateProperty.all<Color>(
                               Colors.blueGrey)),
                       onPressed: () async {
-                        Position myPosition = await getposition();
-                        print(myPosition.latitude);
-                        Task addTask =
-                            Task(title: 'title', description: 'description');
-                        Navigator.pop(context, addTask);
+                        if (!defineDateTime && !defineAPlace) {
+                          if (_checkControllers([
+                            titleController,
+                            descriptionController,
+                          ])) {
+                            Task addTask = Task(
+                                title: titleController.text,
+                                description: descriptionController.text);
+                            Navigator.pop(context, addTask);
+                          } else {
+                            _showToast("Preencher todos os campos");
+                          }
+                        } else if (defineDateTime && !defineAPlace) {
+                          if (_checkControllers([
+                            titleController,
+                            descriptionController,
+                            dateController,
+                            timeController
+                          ])) {
+                            Task addTask = Task(
+                                title: titleController.text,
+                                description: descriptionController.text,
+                                date: dateController.text,
+                                time: timeController.text);
+                            Navigator.pop(context, addTask);
+                          } else {
+                            _showToast("Preencher todos os campos");
+                          }
+                        } else if (!defineDateTime && defineAPlace) {
+                          if (useMyLocation) {
+                            if (_checkControllers([
+                              titleController,
+                              descriptionController,
+                            ])) {
+                              Position myPosition = await getposition();
+                              Task addTask = Task(
+                                  title: titleController.text,
+                                  description: descriptionController.text,
+                                  lat: myPosition.latitude.toString(),
+                                  lon: myPosition.longitude.toString());
+                              Navigator.pop(context, addTask);
+                            } else {
+                              _showToast("Preencher todos os campos");
+                            }
+                          } else {
+                            if (_checkControllers([
+                              titleController,
+                              descriptionController,
+                              cepController,
+                              numController
+                            ])) {
+                              Task addTask = Task(
+                                  title: titleController.text,
+                                  description: descriptionController.text,
+                                  cep: cepController.text,
+                                  num: numController.text);
+                              Navigator.pop(context, addTask);
+                            } else {
+                              _showToast("Preencher todos os campos");
+                            }
+                          }
+                        } else {
+                          if (useMyLocation) {
+                            if (_checkControllers([
+                              titleController,
+                              descriptionController,
+                              dateController,
+                              timeController,
+                            ])) {
+                              Position myPosition = await getposition();
+                              Task addTask = Task(
+                                title: titleController.text,
+                                description: descriptionController.text,
+                                date: dateController.text,
+                                time: timeController.text,
+                                lat: myPosition.latitude.toString(),
+                                lon: myPosition.longitude.toString(),
+                              );
+                              Navigator.pop(context, addTask);
+                            } else {
+                              _showToast("Preencher todos os campos");
+                            }
+                          } else {
+                            if (_checkControllers([
+                              titleController,
+                              descriptionController,
+                              dateController,
+                              timeController,
+                              cepController,
+                              numController
+                            ])) {
+                              Task addTask = Task(
+                                  title: titleController.text,
+                                  description: descriptionController.text,
+                                  date: dateController.text,
+                                  time: timeController.text,
+                                  cep: cepController.text,
+                                  num: numController.text);
+                              Navigator.pop(context, addTask);
+                            } else {
+                              _showToast("Preencher todos os campos");
+                            }
+                          }
+                        }
                       },
                       child: const Text("Enviar"),
                     ),
@@ -269,5 +369,28 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
     }
 
     return await Geolocator.getCurrentPosition();
+  }
+
+  bool _checkControllers(List<TextEditingController> controllers) {
+    for (TextEditingController controller in controllers) {
+      if (controller.text.isEmpty) {
+        return false;
+      } else {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  void _showToast(String message) {
+    Fluttertoast.showToast(
+      msg: message,
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM,
+      timeInSecForIosWeb: 1,
+      backgroundColor: Colors.grey,
+      textColor: Colors.white,
+      fontSize: 16.0,
+    );
   }
 }
