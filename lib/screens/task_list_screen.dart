@@ -12,19 +12,39 @@ class TaskListScreen extends StatefulWidget {
 }
 
 class _TaskListScreenState extends State<TaskListScreen> {
+  final List<Task> taskList = [];
+
+  void _addTask(Task task) {
+    setState(() {
+      taskList.add(task);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const DefaultAppBar(title: 'Lista de Tarefas'),
       body: Column(
         children: [
-          TaskListItem(),
+          Expanded(
+              child: ListView.builder(
+                  itemCount: taskList.length,
+                  itemBuilder: (context, index) {
+                    Task task = taskList[index];
+                    return TaskListItem(task);
+                  }))
         ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.pushNamed(context, Routes.ADD_TASK,
-              arguments: Task(title: '', description: '', date: '', time: ''));
+                  arguments:
+                      Task(title: '', description: '', date: '', time: ''))
+              .then((task) {
+            if (task != null) {
+              _addTask(task as Task);
+            }
+          });
         },
         child: const Icon(Icons.add),
       ),

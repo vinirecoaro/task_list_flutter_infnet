@@ -1,13 +1,13 @@
 class Task {
-  final String description;
-  final String title;
-  final String date;
-  final String time;
-  final String lat;
-  final String lon;
-  final bool edit;
-  final String cep;
-  final String num;
+  String description;
+  String title;
+  String date;
+  String time;
+  String lat;
+  String lon;
+  bool edit;
+  String cep;
+  String num;
 
   Task({
     required this.title,

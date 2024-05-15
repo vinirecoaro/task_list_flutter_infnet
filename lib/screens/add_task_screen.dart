@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:task_app/components/default_app_bar.dart';
 import 'package:task_app/components/input_field.dart';
 import 'package:task_app/components/input_field_large.dart';
@@ -180,7 +181,13 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                       style: ButtonStyle(
                           backgroundColor: MaterialStateProperty.all<Color>(
                               Colors.blueGrey)),
-                      onPressed: () {},
+                      onPressed: () async {
+                        Position myPosition = await getposition();
+                        print(myPosition.latitude);
+                        Task addTask =
+                            Task(title: 'title', description: 'description');
+                        Navigator.pop(context, addTask);
+                      },
                       child: const Text("Enviar"),
                     ),
                   ],
@@ -238,5 +245,29 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
       hour = hourInt.toString();
     }
     return '$hour:$min';
+  }
+
+  Future<Position> getposition() async {
+    LocationPermission permission;
+    bool active = await Geolocator.isLocationServiceEnabled();
+
+    if (!active) {
+      return Future.error('Por favor, habilite a localização no samrtphone');
+    }
+
+    permission = await Geolocator.checkPermission();
+
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        return Future.error('Você precisa autorizar o acesso a localização');
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      return Future.error('Você precisa autorizar o acesso a localização');
+    }
+
+    return await Geolocator.getCurrentPosition();
   }
 }
