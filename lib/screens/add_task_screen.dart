@@ -42,7 +42,9 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
     descriptionController.text = task.description;
 
     return Scaffold(
-        appBar: const DefaultAppBar(title: 'Adicionar Tarefa'),
+        appBar: !view
+            ? const DefaultAppBar(title: 'Adicionar Tarefa')
+            : const DefaultAppBar(title: 'Editar Tarefa'),
         body: SingleChildScrollView(
           child: Column(
             children: [
@@ -303,6 +305,12 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                       label: "Descrição",
                       controller: descriptionController,
                     ),
+                    FilledButton(
+                        onPressed: () {},
+                        style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.all<Color>(
+                                Colors.blueGrey)),
+                        child: const Text('Salvar'))
                   ],
                 )
             ],
