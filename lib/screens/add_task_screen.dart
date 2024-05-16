@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:provider/provider.dart';
 import 'package:task_app/components/default_app_bar.dart';
 import 'package:task_app/components/input_field.dart';
 import 'package:task_app/components/input_field_large.dart';
 import 'package:task_app/models/task.dart';
+import 'package:task_app/providers/task_list_provider.dart';
 
 class AddTaskScreen extends StatefulWidget {
   const AddTaskScreen({super.key});
@@ -36,6 +38,8 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
   Widget build(BuildContext context) {
     bool view;
     final Task task = ModalRoute.of(context)!.settings.arguments as Task;
+    final taskProvider = context.watch<TaskListProvider>();
+    final taskListLenght = taskProvider.taskList.length;
 
     view = task.edit;
     titleController.text = task.title;
@@ -191,6 +195,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                             descriptionController,
                           ])) {
                             Task addTask = Task(
+                                id: taskListLenght,
                                 title: titleController.text,
                                 description: descriptionController.text);
                             Navigator.pop(context, addTask);
@@ -205,6 +210,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                             timeController
                           ])) {
                             Task addTask = Task(
+                                id: taskListLenght,
                                 title: titleController.text,
                                 description: descriptionController.text,
                                 date: dateController.text,
@@ -221,6 +227,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                             ])) {
                               Position myPosition = await getposition();
                               Task addTask = Task(
+                                  id: taskListLenght,
                                   title: titleController.text,
                                   description: descriptionController.text,
                                   lat: myPosition.latitude.toString(),
@@ -237,6 +244,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                               numController
                             ])) {
                               Task addTask = Task(
+                                  id: taskListLenght,
                                   title: titleController.text,
                                   description: descriptionController.text,
                                   cep: cepController.text,
@@ -256,6 +264,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                             ])) {
                               Position myPosition = await getposition();
                               Task addTask = Task(
+                                id: taskListLenght,
                                 title: titleController.text,
                                 description: descriptionController.text,
                                 date: dateController.text,
@@ -277,6 +286,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                               numController
                             ])) {
                               Task addTask = Task(
+                                  id: taskListLenght,
                                   title: titleController.text,
                                   description: descriptionController.text,
                                   date: dateController.text,
