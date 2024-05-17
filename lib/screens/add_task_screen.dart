@@ -86,7 +86,20 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
     return Scaffold(
         appBar: !view
             ? const DefaultAppBar(title: 'Adicionar Tarefa')
-            : const DefaultAppBar(title: 'Editar Tarefa'),
+            : AppBar(
+                title: const Text('Editar Tarefa'),
+                backgroundColor: Colors.blueGrey,
+                titleTextStyle:
+                    const TextStyle(color: Colors.white, fontSize: 24),
+                actions: [
+                  IconButton(
+                      onPressed: () {
+                        taskProvider.deleteTask(task);
+                        Navigator.pop(context);
+                      },
+                      icon: const Icon(Icons.delete))
+                ],
+              ),
         body: SingleChildScrollView(
           child: Column(
             children: [

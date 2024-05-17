@@ -24,4 +24,10 @@ class TaskListProvider extends ChangeNotifier {
         num: task.num);
     notifyListeners();
   }
+
+  void deleteTask(Task task) {
+    int index = taskList.indexWhere((element) => element.id == task.id);
+    taskList.removeAt(index);
+    notifyListeners();
+  }
 }
