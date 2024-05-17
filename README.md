@@ -1,16 +1,17 @@
 # task_app
 
-A new Flutter project.
+An app to turn your task controlling easy
 
-## Getting Started
+# Screens 
 
-This project is a starting point for a Flutter application.
+### Lista de tarefas
 
-A few resources to get you started if this is your first Flutter project:
+![image](https://github.com/vinirecoaro/task_list_flutter_infnet/assets/123481891/4ddad819-d86a-420b-b22d-15da220baf6c)
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+### Adicionar tarefa
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+![image](https://github.com/vinirecoaro/task_list_flutter_infnet/assets/123481891/b5a595da-db24-46dd-bf42-f2be73d3c4ac)  
+
+### Editar e Deletar tarefa
+
+![image](https://github.com/vinirecoaro/task_list_flutter_infnet/assets/123481891/303f37d7-95b2-4f5f-9c82-8978565e4fb4)
