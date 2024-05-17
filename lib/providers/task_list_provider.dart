@@ -8,4 +8,20 @@ class TaskListProvider extends ChangeNotifier {
     taskList.add(task);
     notifyListeners();
   }
+
+  void updateTask(Task task) {
+    int index = taskList.indexWhere((element) => element.id == task.id);
+    taskList[index] = Task(
+        id: task.id,
+        description: task.description,
+        title: task.title,
+        date: task.date,
+        time: task.time,
+        lat: task.lat,
+        lon: task.lon,
+        edit: task.edit,
+        cep: task.cep,
+        num: task.num);
+    notifyListeners();
+  }
 }
