@@ -16,7 +16,7 @@ class AddTaskScreen extends StatefulWidget {
 }
 
 class _AddTaskScreenState extends State<AddTaskScreen> {
-  bool useMyLocation = true;
+  bool useMyLocation = false;
   bool defineAPlace = false;
   bool defineDateTime = false;
   final TextEditingController titleController = TextEditingController();
@@ -30,6 +30,8 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
   bool editInitialState = true;
   bool initialState = true;
   bool view = false;
+  double lat = 0;
+  double lon = 0;
 
   @override
   void initState() {
@@ -52,6 +54,12 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
       numController.text = task.num;
       timeController.text = task.time;
       dateController.text = task.date;
+    }
+
+    if (!view) {
+      if (useMyLocation) {
+        getPosition();
+      }
     }
 
     if (view && editInitialState) {
@@ -199,6 +207,31 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                               const Text("Usar minha localização")
                             ],
                           ),
+                          if (useMyLocation)
+                            Column(
+                              children: [
+                                const SizedBox(
+                                  height: 24,
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      'LAT: ${lat.toString()}',
+                                    ),
+                                    const SizedBox(
+                                      width: 50,
+                                    ),
+                                    Text(
+                                      'LON: ${lon.toString()}',
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(
+                                  height: 24,
+                                )
+                              ],
+                            ),
                           if (!useMyLocation)
                             Column(
                               children: [
@@ -255,13 +288,12 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                               titleController,
                               descriptionController,
                             ])) {
-                              Position myPosition = await getposition();
                               Task addTask = Task(
                                   id: taskListLenght,
                                   title: titleController.text,
                                   description: descriptionController.text,
-                                  lat: myPosition.latitude.toString(),
-                                  lon: myPosition.longitude.toString());
+                                  lat: lat.toString(),
+                                  lon: lon.toString());
                               Navigator.pop(context, addTask);
                             } else {
                               _showToast("Preencher todos os campos");
@@ -292,15 +324,14 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                               dateController,
                               timeController,
                             ])) {
-                              Position myPosition = await getposition();
                               Task addTask = Task(
                                 id: taskListLenght,
                                 title: titleController.text,
                                 description: descriptionController.text,
                                 date: dateController.text,
                                 time: timeController.text,
-                                lat: myPosition.latitude.toString(),
-                                lon: myPosition.longitude.toString(),
+                                lat: lat.toString(),
+                                lon: lon.toString(),
                               );
                               Navigator.pop(context, addTask);
                             } else {
@@ -451,6 +482,31 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                               const Text("Usar minha localização")
                             ],
                           ),
+                          if (useMyLocation)
+                            Column(
+                              children: [
+                                const SizedBox(
+                                  height: 24,
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      'LAT: ${lat.toString()}',
+                                    ),
+                                    const SizedBox(
+                                      width: 50,
+                                    ),
+                                    Text(
+                                      'LON: ${lon.toString()}',
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(
+                                  height: 24,
+                                )
+                              ],
+                            ),
                           if (!useMyLocation)
                             Column(
                               children: [
@@ -509,13 +565,13 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                               titleController,
                               descriptionController,
                             ])) {
-                              Position myPosition = await getposition();
                               Task updateTask = Task(
-                                  id: task.id,
-                                  title: titleController.text,
-                                  description: descriptionController.text,
-                                  lat: myPosition.latitude.toString(),
-                                  lon: myPosition.longitude.toString());
+                                id: task.id,
+                                title: titleController.text,
+                                description: descriptionController.text,
+                                lat: lat.toString(),
+                                lon: lon.toString(),
+                              );
                               taskProvider.updateTask(updateTask);
                               Navigator.pop(context);
                             } else {
@@ -548,15 +604,14 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                               dateController,
                               timeController,
                             ])) {
-                              Position myPosition = await getposition();
                               Task updateTask = Task(
                                 id: task.id,
                                 title: titleController.text,
                                 description: descriptionController.text,
                                 date: dateController.text,
                                 time: timeController.text,
-                                lat: myPosition.latitude.toString(),
-                                lon: myPosition.longitude.toString(),
+                                lat: lat.toString(),
+                                lon: lon.toString(),
                               );
                               taskProvider.updateTask(updateTask);
                               Navigator.pop(context);
@@ -634,7 +689,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
     return '$hour:$min';
   }
 
-  Future<Position> getposition() async {
+  Future<Position> _getposition() async {
     LocationPermission permission;
     bool active = await Geolocator.isLocationServiceEnabled();
 
@@ -656,6 +711,17 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
     }
 
     return await Geolocator.getCurrentPosition();
+  }
+
+  void getPosition() async {
+    try {
+      _showToast('Obtendo Localização');
+      Position myPosition = await _getposition();
+      setState(() {
+        lat = myPosition.latitude;
+        lon = myPosition.longitude;
+      });
+    } catch (e) {}
   }
 
   bool _checkControllers(List<TextEditingController> controllers) {
